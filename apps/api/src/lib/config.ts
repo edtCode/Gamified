@@ -25,4 +25,9 @@ export const config = {
     .map((d) => d.trim().toLowerCase())
     .filter(Boolean),
   isProd: process.env.NODE_ENV === "production",
+  // When true, new signups are marked verified immediately and can log in
+  // without an email round-trip. Enable this in environments that have no email
+  // provider wired up (e.g. the current Vercel deploy); disable once real
+  // verification emails are being sent.
+  autoVerifyEmail: (process.env.AUTO_VERIFY_EMAIL ?? "false").toLowerCase() === "true",
 };

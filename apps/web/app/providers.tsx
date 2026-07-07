@@ -54,10 +54,17 @@ export function Providers({ children }: { children: React.ReactNode }) {
         router.push("/");
       },
       async signup(payload) {
-        const data = await api<{ devVerifyUrl?: string }>("/auth/signup", {
+        const data = await api<{ devVerifyUrl?: string; token?: string; user?: User }>("/auth/signup", {
           method: "POST",
           body: JSON.stringify(payload),
         });
+        // Auto-verify environments return a token + user directly — log in and go home.
+        if (data.token && data.user) {
+          setToken(data.token);
+          setUser(data.user);
+          router.push("/");
+          return null;
+        }
         return data.devVerifyUrl ?? null;
       },
       async verify(token) {

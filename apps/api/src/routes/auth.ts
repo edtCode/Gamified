@@ -58,9 +58,22 @@ authRouter.post(
         passwordHash,
         batch,
         collegeId: college.id,
-        verifyToken,
+        // When auto-verify is on (no email provider available), activate the
+        // account immediately so the user can log in right away.
+        emailVerified: config.autoVerifyEmail,
+        verifyToken: config.autoVerifyEmail ? null : verifyToken,
       },
     });
+
+    // Auto-verify path: log the user in immediately, no email round-trip needed.
+    if (config.autoVerifyEmail) {
+      const authToken = signToken({ sub: user.id, email: user.email, role: user.role });
+      return res.status(201).json({
+        message: "Account created.",
+        token: authToken,
+        user: await publicUser(user.id),
+      });
+    }
 
     const verifyUrl = `${config.webOrigin}/verify?token=${verifyToken}`;
     console.log(`\n🔗 Verify link for ${user.email}: ${verifyUrl}\n`);
