@@ -9,7 +9,7 @@ async function main() {
 
   const app = createApp();
   const server = http.createServer(app);
-  initSockets(server);
+  const io = initSockets(server);
   server.listen(config.port, () => {
     console.log(`\n🚀 Gamified API listening on http://localhost:${config.port}`);
     console.log(`   CORS origin: ${config.webOrigin}`);
@@ -27,6 +27,14 @@ async function main() {
 
   const shutdown = () => {
     console.log("Shutting down server...");
+    // Close Socket.IO first (if present) then the HTTP server.
+    try {
+      if (io && typeof (io as any).close === "function") {
+        (io as any).close();
+      }
+    } catch (err) {
+      console.warn("Error closing Socket.IO:", err);
+    }
     server.close(() => {
       console.log("Server closed");
       process.exit(0);
