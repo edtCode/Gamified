@@ -1,6 +1,18 @@
-import { Badge } from "@prisma/client";
 import { prisma } from "../lib/prisma";
 import { notify } from "./notifications";
+
+// Local badge shape used for typing during build. Avoid importing the generated
+// `Badge` model type directly from `@prisma/client` because `prisma generate`
+// may not run prior to `tsc` on certain build systems (e.g., Vercel).
+type BadgeRecord = {
+  id: string;
+  slug: string;
+  name: string;
+  description: string;
+  icon: string;
+  criteria: any;
+  createdAt: Date;
+};
 
 // Criteria shapes stored in Badge.criteria (JSON):
 //   { type: "TASKS_COMPLETED", count: number }
@@ -51,7 +63,7 @@ async function meets(userId: string, criteria: Criteria): Promise<boolean> {
 
 // Evaluate every badge the user hasn't earned yet; award those now satisfied.
 // Returns the newly awarded badges (each also produces a notification).
-export async function evaluateBadges(userId: string): Promise<Badge[]> {
+export async function evaluateBadges(userId: string): Promise<BadgeRecord[]> {
   const [allBadges, earned] = await Promise.all([
     prisma.badge.findMany(),
     prisma.userBadge.findMany({
@@ -60,7 +72,7 @@ export async function evaluateBadges(userId: string): Promise<Badge[]> {
     }),
   ]);
   const earnedIds = new Set(earned.map((e: any) => e.badgeId));
-  const newlyAwarded: Badge[] = [];
+  const newlyAwarded: BadgeRecord[] = [];
 
   for (const badge of allBadges) {
     if (earnedIds.has(badge.id)) continue;
