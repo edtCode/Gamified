@@ -1,0 +1,20 @@
+# Render deployment manifest for the backend service.
+# Connect this Git repo to Render and Render will deploy the service defined below.
+
+services:
+  - type: web
+    name: gamified-api
+    env: node
+    plan: free
+    rootDir: apps/api
+    buildCommand: npm ci && npm run build
+    startCommand: npm run start
+    autoDeploy: true
+    # The following env vars should be set in the Render dashboard after connecting the repo.
+    envVars:
+      - key: DATABASE_URL
+      - key: REDIS_URL
+      - key: JWT_SECRET
+      - key: WEB_ORIGIN
+      - key: NODE_ENV
+      - key: API_PORT
