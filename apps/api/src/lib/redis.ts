@@ -7,7 +7,7 @@ import { config } from "./config";
 export const redis = new Redis(config.redisUrl, {
   lazyConnect: true,
   maxRetriesPerRequest: 1,
-  retryStrategy: (times) => (times > 5 ? null : Math.min(times * 200, 2000)),
+  retryStrategy: (times: number) => (times > 5 ? null : Math.min(times * 200, 2000)),
 });
 
 let ready = false;
@@ -16,7 +16,7 @@ redis.on("ready", () => {
   ready = true;
   console.log("✅ Redis connected");
 });
-redis.on("error", (err) => {
+redis.on("error", (err: Error) => {
   if (ready) console.warn("⚠️  Redis error:", err.message);
   ready = false;
 });

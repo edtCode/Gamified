@@ -124,7 +124,7 @@ v2Router.get("/analytics", requireAuth, async (req, res) => {
   if (req.user!.role !== "ADMIN") return res.status(403).json({ error: "Admin only" });
   const [userCount, totalXp, badgeCount] = await Promise.all([
     prisma.user.count(),
-    prisma.user.aggregate({ _sum: { xp: true } }).then((r) => r._sum.xp ?? 0),
+    prisma.user.aggregate({ _sum: { xp: true } }).then((r: any) => r._sum.xp ?? 0),
     prisma.userBadge.count(),
   ]);
   const rooms = redisReady() ? (await redis.scard("rooms")) : 0;

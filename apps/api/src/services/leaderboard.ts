@@ -31,7 +31,7 @@ async function computeFromDb(collegeId: string, batch: string): Promise<Leaderbo
     orderBy: [{ xp: "desc" }, { createdAt: "asc" }],
     select: { id: true, name: true, level: true, xp: true },
   });
-  return users.map((u, i) => ({
+  return users.map((u: any, i: number) => ({
     rank: i + 1,
     userId: u.id,
     name: u.name,
@@ -69,5 +69,5 @@ export async function getBatchLeaderboard(
     }
   }
 
-  return rows.map((r) => ({ ...r, isCurrentUser: r.userId === currentUserId }));
+  return rows.map((r: LeaderboardRow) => ({ ...r, isCurrentUser: r.userId === currentUserId }));
 }

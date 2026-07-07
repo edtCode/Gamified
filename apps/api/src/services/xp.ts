@@ -28,7 +28,7 @@ export async function resolveLevel(xp: number): Promise<LevelInfo> {
     if (xp >= def.minXp) current = def;
     else break;
   }
-  const next = levels.find((l) => l.level === current.level + 1) ?? null;
+  const next = levels.find((l: any) => l.level === current.level + 1) ?? null;
 
   return {
     level: current.level,
