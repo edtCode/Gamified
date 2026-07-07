@@ -21,7 +21,7 @@ learningRouter.get(
       include: { _count: { select: { tasks: true } } },
     });
     res.json({
-      tracks: tracks.map((t) => ({
+      tracks: tracks.map((t: any) => ({
         id: t.id,
         slug: t.slug,
         name: t.name,
@@ -54,7 +54,7 @@ learningRouter.get(
 
     res.json({
       track: { id: track.id, slug: track.slug, name: track.name, description: track.description },
-      tasks: track.tasks.map((t) => ({
+      tasks: track.tasks.map((t: any) => ({
         id: t.id,
         title: t.title,
         description: t.description,
@@ -80,7 +80,7 @@ learningRouter.get(
       include: { task: { include: { track: { select: { slug: true, name: true } } } } },
     });
     res.json({
-      tasks: userTasks.map((ut) => ({
+      tasks: userTasks.map((ut: any) => ({
         id: ut.task.id,
         title: ut.task.title,
         xpReward: ut.task.xpReward,
@@ -141,7 +141,7 @@ learningRouter.post(
       newLevel: award.level,
       newLevelTitle: award.newLevelTitle,
       streakCount: streak.streakCount,
-      newBadges: newBadges.map((b) => ({
+      newBadges: newBadges.map((b: any) => ({
         slug: b.slug,
         name: b.name,
         icon: b.icon,

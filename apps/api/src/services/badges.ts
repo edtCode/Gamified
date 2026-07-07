@@ -39,7 +39,7 @@ async function meets(userId: string, criteria: Criteria): Promise<boolean> {
         where: {
           userId,
           status: "DONE",
-          taskId: { in: track.tasks.map((t) => t.id) },
+          taskId: { in: track.tasks.map((t: any) => t.id) },
         },
       });
       return doneCount >= track.tasks.length;
@@ -59,7 +59,7 @@ export async function evaluateBadges(userId: string): Promise<Badge[]> {
       select: { badgeId: true },
     }),
   ]);
-  const earnedIds = new Set(earned.map((e) => e.badgeId));
+  const earnedIds = new Set(earned.map((e: any) => e.badgeId));
   const newlyAwarded: Badge[] = [];
 
   for (const badge of allBadges) {

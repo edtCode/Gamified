@@ -13,7 +13,7 @@ gamificationRouter.get(
   asyncHandler(async (_req, res) => {
     const badges = await prisma.badge.findMany({ orderBy: { createdAt: "asc" } });
     res.json({
-      badges: badges.map((b) => ({
+      badges: badges.map((b: any) => ({
         slug: b.slug,
         name: b.name,
         description: b.description,
@@ -34,7 +34,7 @@ gamificationRouter.get(
       include: { badge: true },
     });
     res.json({
-      badges: earned.map((ub) => ({
+      badges: earned.map((ub: any) => ({
         slug: ub.badge.slug,
         name: ub.badge.name,
         description: ub.badge.description,
