@@ -32,26 +32,9 @@ export async function api<T>(path: string, options: RequestInit = {}): Promise<T
   });
 
   const text = await response.text();
-  let data: any = {};
-  if (text) {
-    const contentType = response.headers.get("content-type") || "";
-    if (contentType.includes("application/json")) {
-      try {
-        data = JSON.parse(text);
-      } catch (err) {
-        // Invalid JSON from server — wrap in ApiError so UI can surface a readable message
-        const msg = typeof text === "string" ? text : String(text);
-        throw new ApiError(response.status, msg || response.statusText || "Invalid JSON response");
-      }
-    } else {
-      // Non-JSON response (HTML/error page) — pass raw text as message
-      data = { message: text };
-    }
-  }
-
+  const data = text ? JSON.parse(text) : {};
   if (!response.ok) {
     throw new ApiError(response.status, data.error ?? data.message ?? "Request failed");
   }
-
   return data as T;
 }
