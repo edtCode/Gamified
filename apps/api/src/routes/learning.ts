@@ -47,10 +47,10 @@ learningRouter.get(
 
     const me = await prisma.user.findUniqueOrThrow({ where: { id: req.user!.sub } });
     const done = await prisma.userTask.findMany({
-      where: { userId: me.id, taskId: { in: track.tasks.map((t) => t.id) } },
+      where: { userId: me.id, taskId: { in: track.tasks.map((t: any) => t.id) } },
       select: { taskId: true, completedAt: true },
     });
-    const doneMap = new Map(done.map((d) => [d.taskId, d.completedAt]));
+    const doneMap = new Map(done.map((d: any) => [d.taskId, d.completedAt]));
 
     res.json({
       track: { id: track.id, slug: track.slug, name: track.name, description: track.description },
