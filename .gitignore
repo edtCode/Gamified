@@ -1,0 +1,32 @@
+# Dependencies
+node_modules/
+.pnp
+.pnp.js
+
+# Env
+.env
+.env.local
+.env.*.local
+
+# Builds
+dist/
+build/
+.next/
+out/
+
+# Logs
+*.log
+npm-debug.log*
+
+# Prisma
+apps/api/prisma/*.db
+
+# Editor / OS
+.DS_Store
+.idea/
+.vscode/
+*.swp
+
+# Misc
+coverage/
+.turbo/

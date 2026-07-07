@@ -1,0 +1,37 @@
+services:
+  postgres:
+    image: postgres:18-alpine
+    container_name: gamified-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: gamified
+      POSTGRES_PASSWORD: gamified
+      POSTGRES_DB: gamified
+    ports:
+      # Host 5544 → container 5432, to avoid clashing with any Postgres already
+      # bound to 5432/5433 on this machine. DATABASE_URL in .env points at 5544.
+      - "5544:5432"
+    volumes:
+      # Postgres 18+ images store data in a version-specific subdirectory and
+      # expect the mount at /var/lib/postgresql (not .../data).
+      - pgdata:/var/lib/postgresql
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U gamified -d gamified"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  redis:
+    image: redis:7-alpine
+    container_name: gamified-redis
+    restart: unless-stopped
+    ports:
+      - "6379:6379"
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+volumes:
+  pgdata:

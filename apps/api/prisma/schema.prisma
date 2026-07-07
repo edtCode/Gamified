@@ -1,0 +1,165 @@
+// Gamified College Learning App — data model
+// Docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Role {
+  STUDENT
+  ADMIN
+}
+
+enum TaskStatus {
+  TODO
+  DONE
+}
+
+model College {
+  id          String @id @default(cuid())
+  name        String
+  emailDomain String @unique
+  users       User[]
+
+  createdAt DateTime @default(now())
+}
+
+model User {
+  id           String  @id @default(cuid())
+  email        String  @unique
+  name         String
+  passwordHash String
+  batch        String // graduation batch, e.g. "2027"
+  role         Role    @default(STUDENT)
+
+  // Gamification state
+  level        Int      @default(1)
+  xp           Int      @default(0)
+  streakCount  Int      @default(0)
+  lastActiveOn DateTime? // date-only semantics; used by streak logic
+
+  // Auth / verification
+  emailVerified Boolean @default(false)
+  verifyToken   String? @unique
+
+  collegeId String
+  college   College @relation(fields: [collegeId], references: [id])
+
+  userTasks        UserTask[]
+  userBadges       UserBadge[]
+  sentMessages     Message[]      @relation("SentMessages")
+  receivedMessages Message[]      @relation("ReceivedMessages")
+  notifications    Notification[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([collegeId, batch])
+  @@index([xp])
+}
+
+model Track {
+  id          String  @id @default(cuid())
+  slug        String  @unique
+  name        String
+  description String
+  order       Int
+  tasks       Task[]
+
+  createdAt DateTime @default(now())
+}
+
+model Task {
+  id            String @id @default(cuid())
+  trackId       String
+  track         Track  @relation(fields: [trackId], references: [id], onDelete: Cascade)
+  title         String
+  description   String
+  xpReward      Int    @default(50)
+  order         Int
+  levelRequired Int    @default(1)
+
+  userTasks UserTask[]
+
+  createdAt DateTime @default(now())
+
+  @@index([trackId, order])
+}
+
+model UserTask {
+  id          String     @id @default(cuid())
+  userId      String
+  user        User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  taskId      String
+  task        Task       @relation(fields: [taskId], references: [id], onDelete: Cascade)
+  status      TaskStatus @default(DONE)
+  completedAt DateTime   @default(now())
+
+  @@unique([userId, taskId])
+  @@index([userId])
+}
+
+model Badge {
+  id          String @id @default(cuid())
+  slug        String @unique
+  name        String
+  description String
+  icon        String // emoji or icon key
+  // Machine-checkable criteria, evaluated in services/badges.ts
+  // e.g. { "type": "TASKS_COMPLETED", "count": 1 }
+  criteria    Json
+
+  userBadges UserBadge[]
+
+  createdAt DateTime @default(now())
+}
+
+model UserBadge {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  badgeId   String
+  badge     Badge    @relation(fields: [badgeId], references: [id], onDelete: Cascade)
+  awardedAt DateTime @default(now())
+
+  @@unique([userId, badgeId])
+  @@index([userId])
+}
+
+model Message {
+  id         String   @id @default(cuid())
+  fromUserId String
+  fromUser   User     @relation("SentMessages", fields: [fromUserId], references: [id], onDelete: Cascade)
+  toUserId   String
+  toUser     User     @relation("ReceivedMessages", fields: [toUserId], references: [id], onDelete: Cascade)
+  body       String
+  read       Boolean  @default(false)
+  createdAt  DateTime @default(now())
+
+  @@index([fromUserId, toUserId])
+  @@index([toUserId, read])
+}
+
+model Notification {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  type      String // e.g. "LEVEL_UP", "BADGE", "MESSAGE", "STREAK"
+  body      String
+  read      Boolean  @default(false)
+  createdAt DateTime @default(now())
+
+  @@index([userId, read])
+}
+
+// XP → level thresholds (seeded). level is reached when xp >= minXp.
+model LevelDef {
+  level Int    @id
+  minXp Int    @unique
+  title String
+}

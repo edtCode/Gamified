@@ -1,0 +1,23 @@
+{
+  "name": "gamified",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Gamified College Learning App — level up through learning tasks, find peers, message mentors, compete on batch leaderboards.",
+  "workspaces": [
+    "apps/api",
+    "apps/web"
+  ],
+  "scripts": {
+    "dev": "concurrently -n api,web -c cyan,magenta \"npm run dev -w apps/api\" \"npm run dev -w apps/web\"",
+    "build": "npm run build -w apps/api && npm run build -w apps/web",
+    "db:migrate": "npm run db:migrate -w apps/api",
+    "db:seed": "npm run db:seed -w apps/api",
+    "db:reset": "npm run db:reset -w apps/api",
+    "db:generate": "npm run db:generate -w apps/api",
+    "docker:up": "docker compose up -d",
+    "docker:down": "docker compose down"
+  },
+  "devDependencies": {
+    "concurrently": "^9.1.2"
+  }
+}
