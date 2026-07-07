@@ -18,7 +18,8 @@ export function isAllowedOrigin(origin: string): boolean {
   if (origin === config.webOrigin) return true;
   try {
     const { hostname } = new URL(origin);
-    return hostname === "localhost" || hostname === "127.0.0.1" || hostname === "::1";
+    // Allow localhost, 127.0.0.1, ::1, and all vercel.app deployments
+    return ["localhost", "127.0.0.1", "::1"].includes(hostname) || hostname.endsWith(".vercel.app");
   } catch {
     return false;
   }
