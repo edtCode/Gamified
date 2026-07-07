@@ -32,9 +32,20 @@ export async function api<T>(path: string, options: RequestInit = {}): Promise<T
   });
 
   const text = await response.text();
-  const data = text ? JSON.parse(text) : {};
+  let data: any = {};
+  if (text) {
+    try {
+      data = JSON.parse(text);
+    } catch (err) {
+      const snippet = text.length > 200 ? text.slice(0, 200) + "..." : text;
+      // If the response isn't JSON, surface a clearer error for debugging.
+      throw new ApiError(response.status, `Non-JSON response: ${snippet}`);
+    }
+  }
+
   if (!response.ok) {
     throw new ApiError(response.status, data.error ?? data.message ?? "Request failed");
   }
+  
   return data as T;
 }

@@ -1,165 +1,242 @@
-# 🎮 Gamified College Learning App
+<div align="center">
 
-A college-focused social learning app that gamifies progress. Students level up through learning
-tracks (**Basics → DSA → Projects → Resume → Interviews**), earn XP and badges, keep daily streaks,
-find peers, message mentors 2+ levels above them, and compete on batch-wise leaderboards.
+# Gamified
 
-This repository contains a **complete, runnable v1**.
+A college-focused social learning platform that turns academic progress into an engaging, game-like experience.
 
----
+![Node.js](https://img.shields.io/badge/Node.js-Express-339933?style=flat-square&logo=node.js&logoColor=white)
+![TypeScript](https://img.shields.io/badge/TypeScript-strict-3178C6?style=flat-square&logo=typescript&logoColor=white)
+![Next.js](https://img.shields.io/badge/Next.js-Frontend-000000?style=flat-square&logo=next.js&logoColor=white)
+![PostgreSQL](https://img.shields.io/badge/PostgreSQL-Database-4169E1?style=flat-square&logo=postgresql&logoColor=white)
+![Prisma](https://img.shields.io/badge/Prisma-ORM-2D3748?style=flat-square&logo=prisma&logoColor=white)
+![Redis](https://img.shields.io/badge/Redis-Cache-DC382D?style=flat-square&logo=redis&logoColor=white)
+![Socket.IO](https://img.shields.io/badge/Socket.IO-Realtime-010101?style=flat-square&logo=socket.io&logoColor=white)
+![License](https://img.shields.io/badge/license-MIT-blue?style=flat-square)
 
-## Tech stack
-
-| Layer      | Choice                                             |
-| ---------- | -------------------------------------------------- |
-| Frontend   | Next.js (App Router) + Tailwind CSS                |
-| Backend    | Node.js + Express + TypeScript                     |
-| Real-time  | Socket.IO (live chat + notifications)              |
-| Database   | PostgreSQL (via Prisma ORM)                        |
-| Cache      | Redis (leaderboard sorted sets)                    |
-| Auth       | JWT (Bearer) + bcrypt, college-email verification  |
-| Infra      | Docker Compose (Postgres + Redis)                  |
-
-Monorepo via npm workspaces: `apps/api` (backend) and `apps/web` (frontend).
+</div>
 
 ---
 
-## Prerequisites
+## Overview
 
-- Node.js 20+ and npm 9+
-- Docker + Docker Compose (for Postgres + Redis)
+Gamified brings a game-like structure to college learning. Students follow learning tracks, complete tasks, and earn XP, levels, badges, and streaks, while competing on batch-wise leaderboards. The platform also supports mentor matching and real-time messaging, combined with a notification system and a campus-style social layer.
 
----
+**Core features**
 
-## Quick start
-
-```bash
-# 1. Clone & install (installs both workspaces)
-npm install
-
-# 2. Configure environment
-cp .env.example .env
-cp .env apps/api/.env          # the API reads its own .env
-# (defaults already match docker-compose.yml — no edits needed for local dev)
-
-# 3. Start Postgres + Redis
-npm run docker:up
-
-# 4. Create the schema and seed demo data
-npm run db:migrate
-npm run db:seed
-
-# 5. Run API (:4000) + Web (:3000) together
-npm run dev
-```
-
-Open **http://localhost:3000**.
+- Structured learning tracks and tasks
+- XP, levels, badges, and streak tracking
+- Batch-wise leaderboards
+- Mentor matching with level-gated messaging
+- Real-time messaging via Socket.IO
+- Notification system
+- Campus-style social experience
 
 ---
 
-## Using the app
+## Tech Stack
 
-### New account
-1. Go to **/signup** and register with a college email on an allowed domain — default `you@example.edu`.
-2. In dev, **no email is sent**. The verification link is printed to the **API console**:
-   `🔗 Verify link: http://localhost:3000/verify?token=...`
-   Open it (or paste the token on the `/verify` page) to activate the account.
-3. Log in, then complete tasks on **/tracks** to gain XP, level up, earn badges, and build a streak.
-
-### Demo accounts (created by the seed)
-All seeded users share the password **`password123`**. Emails are on `example.edu`:
-
-| Email                     | Batch | Approx. level | Notes                         |
-| ------------------------- | ----- | ------------- | ----------------------------- |
-| `aarav@example.edu`       | 2027  | 1             | Fresh learner                 |
-| `diya@example.edu`        | 2027  | 3             | Mid-progress                  |
-| `kabir@example.edu`       | 2027  | 6             | Eligible mentor for level ≤4  |
-| `meera@example.edu`       | 2027  | 8             | Top of 2027 batch             |
-| `rohan@example.edu`       | 2026  | 5             | Other batch                   |
-| `ananya@example.edu`      | 2026  | 9             | Top of 2026 batch             |
-
-(Full list printed at the end of `npm run db:seed`.)
+| Layer | Technology |
+|---|---|
+| Backend | Node.js, Express, TypeScript |
+| Database | PostgreSQL with Prisma ORM |
+| Cache / Realtime state | Redis |
+| Realtime transport | Socket.IO |
+| Frontend | Next.js, Tailwind CSS |
+| Package management | npm workspaces (monorepo) |
 
 ---
 
-## Features (v1)
-
-- ✅ Signup/login with **college-email verification** (JWT auth)
-- ✅ Profile with **current level, XP, streak, and badges**
-- ✅ **Tracks & checklists** — per-skill milestone tasks
-- ✅ **Level system + badges + XP** with level-up / badge toasts
-- ✅ **Batch-wise leaderboard** (Redis-cached)
-- ✅ **Mentor messaging** — DM seniors 2+ levels above, in real time
-- ✅ **Notifications + daily streak counter**
-
-### v2 (stubbed)
-Roadmap engine, study rooms & pair-matching, unlockable resources / AMA scheduling, admin analytics,
-referral & placement-readiness score. The API returns `501 { status: "planned" }` for these, and the
-web app shows "Coming in v2" placeholders.
-
----
-
-## Project layout
+## Project Structure
 
 ```
 Gamified/
-├── docker-compose.yml        # Postgres + Redis
-├── .env.example              # env template
-├── package.json              # npm workspaces + root scripts
-├── apps/
-│   ├── api/                  # Express + Prisma + Socket.IO backend
-│   │   ├── prisma/           # schema.prisma + seed.ts
-│   │   └── src/
-│   │       ├── routes/       # REST endpoints
-│   │       ├── services/     # xp, badges, streak, leaderboard, mentors
-│   │       ├── middleware/   # auth, error handling
-│   │       ├── sockets/      # Socket.IO handlers
-│   │       └── lib/          # prisma, redis, config, jwt
-│   └── web/                  # Next.js (App Router) + Tailwind
-│       └── app/, components/, lib/
-└── README.md
+├── docker-compose.yml
+├── .env.example
+├── package.json
+└── apps/
+    ├── api/
+    │   ├── prisma/
+    │   │   ├── schema.prisma
+    │   │   └── seed.ts
+    │   └── src/
+    │       ├── app.ts
+    │       ├── index.ts
+    │       ├── lib/
+    │       ├── middleware/
+    │       ├── routes/
+    │       ├── services/
+    │       └── sockets/
+    └── web/
+        ├── app/
+        ├── components/
+        ├── lib/
+        └── scripts/
 ```
 
 ---
 
-## Useful scripts (run from repo root)
+## Getting Started
 
-| Command              | Description                                  |
-| -------------------- | -------------------------------------------- |
-| `npm run dev`        | Run API + Web together                       |
-| `npm run build`      | Production build of both apps                |
-| `npm run docker:up`  | Start Postgres + Redis                       |
-| `npm run docker:down`| Stop containers                              |
-| `npm run db:migrate` | Apply Prisma migrations                      |
-| `npm run db:seed`    | Seed tracks, tasks, badges, levels, users    |
-| `npm run db:reset`   | Drop, re-migrate, and re-seed the database   |
+### 1. Environment
+
+Copy the environment templates before running the project:
+
+```bash
+cp .env.example .env
+```
+
+### 2. Start infrastructure
+
+Bring up PostgreSQL and Redis with Docker:
+
+```bash
+npm run docker:up
+```
+
+### 3. Database
+
+Apply migrations and seed demo data:
+
+```bash
+npm run db:migrate
+npm run db:seed
+```
+
+### 4. Run the app
+
+Start the API and web app together:
+
+```bash
+npm run dev
+```
+
+The frontend will be available at:
+
+```
+http://localhost:3000
+```
 
 ---
 
-## API overview
+## API Overview
 
-Base URL `http://localhost:4000`. Send `Authorization: Bearer <token>` for protected routes.
+Base URL: `http://localhost:4000`
 
-```
-POST   /auth/signup            { email, name, password, batch }
-GET    /auth/verify?token=...
-POST   /auth/login             { email, password }
-GET    /auth/me
+### Authentication
 
-GET    /users/me   |  PATCH /users/me  |  GET /users/:id
+| Method | Endpoint |
+|---|---|
+| POST | `/auth/signup` |
+| GET | `/auth/verify?token=...` |
+| POST | `/auth/login` |
+| GET | `/auth/me` |
 
-GET    /tracks                 GET /tracks/:slug/tasks
-GET    /me/tasks               POST /me/tasks/:taskId/complete
+### Users
 
-GET    /badges                 GET /me/badges
-GET    /leaderboard?scope=batch
+| Method | Endpoint |
+|---|---|
+| GET | `/users/me` |
+| PATCH | `/users/me` |
+| GET | `/users/:id` |
 
-GET    /mentors                GET /conversations
-GET    /messages/:userId       POST /messages   { toUserId, body }
+### Learning / Gamification
 
-GET    /notifications          POST /notifications/:id/read
+| Method | Endpoint |
+|---|---|
+| GET | `/tracks` |
+| GET | `/tracks/:slug/tasks` |
+| GET | `/me/tasks` |
+| POST | `/me/tasks/:taskId/complete` |
+| GET | `/badges` |
+| GET | `/me/badges` |
+| GET | `/leaderboard?scope=batch` |
 
-GET    /roadmap  |  GET /rooms  → 501 (planned for v2)
-```
+### Social
 
-Socket.IO (namespace `/`, JWT in `auth.token`): `message:send` → `message:new`, plus `notification:new`.
+| Method | Endpoint |
+|---|---|
+| GET | `/mentors` |
+| GET | `/conversations` |
+| GET | `/messages/:userId` |
+| POST | `/messages` |
+
+### Notifications
+
+| Method | Endpoint |
+|---|---|
+| GET | `/notifications` |
+| POST | `/notifications/:id/read` |
+| POST | `/notifications/read-all` |
+
+### v2 (Stubbed)
+
+| Method | Endpoint |
+|---|---|
+| GET | `/roadmap` |
+| GET | `/rooms` |
+| POST | `/rooms` |
+
+---
+
+## Scripts
+
+Run the following from the repository root:
+
+| Command | Description |
+|---|---|
+| `npm run dev` | Start the API and web app concurrently |
+| `npm run build` | Build the backend and frontend |
+| `npm run docker:up` | Start PostgreSQL and Redis containers |
+| `npm run docker:down` | Stop containers |
+| `npm run db:migrate` | Apply Prisma migrations |
+| `npm run db:seed` | Seed demo data |
+| `npm run db:reset` | Reset the database |
+
+---
+
+## Demo Data
+
+Seeded users share the password `password123`. The seed file creates example learners and mentors using `example.edu` email addresses.
+
+---
+
+## Environment Variables
+
+The `api` app reads the following variables:
+
+| Variable | Description |
+|---|---|
+| `API_PORT` | Port the API server runs on |
+| `WEB_ORIGIN` | Allowed origin for the frontend (CORS) |
+| `DATABASE_URL` | PostgreSQL connection string |
+| `REDIS_URL` | Redis connection string |
+| `JWT_SECRET` | Secret used to sign JWTs |
+| `JWT_EXPIRES_IN` | JWT expiration duration |
+| `ALLOWED_EMAIL_DOMAINS` | Restricts signup to specific college email domains |
+
+The backend loads environment variables from both the repository root `.env` and its own local `.env`.
+
+---
+
+## Notes
+
+- The API exposes real-time events through Socket.IO.
+- Mentor messaging enforces a minimum two-level difference for mentorship eligibility.
+- Redis is used for caching leaderboard data and managing room state.
+- v2 routes are currently stubbed and return a planned/coming-soon response.
+
+---
+
+## Roadmap
+
+- [ ] Contribution guidelines
+- [ ] Known issues
+- [ ] Public roadmap
+
+---
+
+<div align="center">
+
+Built as part of an ongoing backend engineering roadmap.
+
+</div>
