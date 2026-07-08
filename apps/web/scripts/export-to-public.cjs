@@ -13,6 +13,7 @@ async function exists(dir) {
 async function main() {
   const root = process.cwd();
   const outDir = path.join(root, "out");
+  const nextDir = path.join(root, ".next");
   const publicDir = path.join(root, "public");
 
   if (!(await exists(outDir))) {
@@ -22,8 +23,11 @@ async function main() {
   await fs.rm(publicDir, { recursive: true, force: true });
   await fs.mkdir(publicDir, { recursive: true });
   await fs.cp(outDir, publicDir, { recursive: true });
+  if (await exists(nextDir)) {
+    await fs.cp(nextDir, publicDir, { recursive: true, force: true });
+  }
 
-  console.log("Copied static export from out into public for Vercel output.");
+  console.log("Copied static export and Next manifests into public for Vercel output.");
 }
 
 main().catch((error) => {

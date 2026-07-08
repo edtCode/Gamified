@@ -12,17 +12,27 @@ async function directoryExists(dir) {
 
 async function copyStaticExportToPublic(root) {
   const outDir = path.join(root, "out");
+  const nextDir = path.join(root, ".next");
   const publicDir = path.join(root, "public");
 
   if (await directoryExists(outDir)) {
     await fs.rm(publicDir, { recursive: true, force: true });
     await fs.mkdir(publicDir, { recursive: true });
     await fs.cp(outDir, publicDir, { recursive: true });
-    console.log("Copied static export from out into public for Vercel output.");
+    if (await directoryExists(nextDir)) {
+      await fs.cp(nextDir, publicDir, { recursive: true, force: true });
+    }
+    console.log("Copied static export and Next manifests into public for Vercel output.");
     return;
   }
 
   await fs.mkdir(publicDir, { recursive: true });
+  if (await directoryExists(nextDir)) {
+    await fs.cp(nextDir, publicDir, { recursive: true, force: true });
+    console.log("Copied Next manifests into public for Vercel output.");
+    return;
+  }
+
   await fs.writeFile(
     path.join(publicDir, ".vercel-output-placeholder"),
     "Created by build so Vercel outputDirectory=public is never missing.\n"

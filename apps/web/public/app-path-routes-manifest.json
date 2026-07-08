@@ -1,0 +1,13 @@
+{
+  "/_not-found/page": "/_not-found",
+  "/leaderboard/page": "/leaderboard",
+  "/mentors/page": "/mentors",
+  "/login/page": "/login",
+  "/notifications/page": "/notifications",
+  "/page": "/",
+  "/roadmap/page": "/roadmap",
+  "/rooms/page": "/rooms",
+  "/signup/page": "/signup",
+  "/tracks/page": "/tracks",
+  "/verify/page": "/verify"
+}
