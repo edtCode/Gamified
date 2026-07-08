@@ -13,6 +13,7 @@ type AuthContextValue = {
   signup: (payload: { name: string; email: string; password: string; batch: string }) => Promise<string | null>;
   verify: (token: string) => Promise<void>;
   refresh: () => Promise<void>;
+  updateUser: (user: User) => void;
   logout: () => void;
 };
 
@@ -74,6 +75,9 @@ export function Providers({ children }: { children: React.ReactNode }) {
         router.push("/");
       },
       refresh,
+      updateUser(nextUser) {
+        setUser(nextUser);
+      },
       logout() {
         setToken(null);
         resetSocket();

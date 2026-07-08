@@ -9,9 +9,21 @@ export interface LevelInfo {
   xpForThisLevel: number | null; // span of the current level, null at max
 }
 
+type LevelDefRecord = { level: number; minXp: number; title: string };
+
+let cachedLevels: { expires: number; levels: LevelDefRecord[] } | null = null;
+const LEVEL_CACHE_TTL_MS = 5 * 60_000;
+
+async function getLevelDefs(): Promise<LevelDefRecord[]> {
+  if (cachedLevels && cachedLevels.expires > Date.now()) return cachedLevels.levels;
+  const levels = await prisma.levelDef.findMany({ orderBy: { level: "asc" } });
+  cachedLevels = { levels, expires: Date.now() + LEVEL_CACHE_TTL_MS };
+  return levels;
+}
+
 // Resolve the level (and progress bounds) for a given XP total from LevelDef.
 export async function resolveLevel(xp: number): Promise<LevelInfo> {
-  const levels = await prisma.levelDef.findMany({ orderBy: { level: "asc" } });
+  const levels = await getLevelDefs();
   if (levels.length === 0) {
     return {
       level: 1,
@@ -51,7 +63,10 @@ export interface AwardResult {
 // Add XP to a user, recompute their level, and persist. Returns whether a
 // level-up occurred so callers can fire notifications / badge checks.
 export async function awardXp(userId: string, amount: number): Promise<AwardResult> {
-  const user = await prisma.user.findUniqueOrThrow({ where: { id: userId } });
+  const user = await prisma.user.findUniqueOrThrow({
+    where: { id: userId },
+    select: { xp: true, level: true },
+  });
   const previousLevel = user.level;
   const newXp = user.xp + amount;
   const info = await resolveLevel(newXp);

@@ -28,15 +28,22 @@ v2Router.get("/rooms", requireAuth, async (req, res) => {
   if (!redisReady()) return res.json({ rooms: [] });
   const userId = req.user!.sub;
   const ids = (await redis.smembers("rooms")) || [];
-  const rooms = [] as any[];
+  const pipeline = redis.pipeline();
   for (const id of ids) {
-    const meta = await redis.hgetall(`room:${id}`);
-    const members = await redis.scard(`room:${id}:members`);
+    pipeline.hgetall(`room:${id}`);
+    pipeline.scard(`room:${id}:members`);
+    pipeline.sismember(`room:${id}:members`, userId);
+  }
+  const results = await pipeline.exec();
+  const rooms = ids.map((id, index) => {
+    const base = index * 3;
+    const meta = (results?.[base]?.[1] ?? {}) as Record<string, string>;
+    const members = Number(results?.[base + 1]?.[1] ?? 0);
     // Tell the client whether the current user is already a member, so the UI
     // can show a "Joined" state instead of an always-clickable "Join" button.
-    const joined = (await redis.sismember(`room:${id}:members`, userId)) === 1;
-    rooms.push({ id, name: meta.name ?? "", creatorId: meta.creatorId ?? null, members, joined });
-  }
+    const joined = Number(results?.[base + 2]?.[1] ?? 0) === 1;
+    return { id, name: meta.name ?? "", creatorId: meta.creatorId ?? null, members, joined };
+  });
   res.json({ rooms });
 });
 

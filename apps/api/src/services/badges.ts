@@ -25,36 +25,66 @@ type Criteria =
   | { type: "LEVEL_REACHED"; level: number }
   | { type: "STREAK_REACHED"; days: number };
 
-async function meets(userId: string, criteria: Criteria): Promise<boolean> {
+type BadgeSnapshot = {
+  taskCount: number;
+  userLevel: number;
+  streakCount: number;
+  trackTaskIds: Map<string, string[]>;
+};
+
+async function buildSnapshot(userId: string, criteriaList: Criteria[]): Promise<BadgeSnapshot> {
+  const trackSlugs = Array.from(
+    new Set(
+      criteriaList
+        .filter((criteria): criteria is { type: "TRACK_COMPLETED"; trackSlug: string } => criteria.type === "TRACK_COMPLETED")
+        .map((criteria) => criteria.trackSlug)
+    )
+  );
+
+  const [taskCount, user, tracks] = await Promise.all([
+    prisma.userTask.count({ where: { userId, status: "DONE" } }),
+    prisma.user.findUniqueOrThrow({
+      where: { id: userId },
+      select: { level: true, streakCount: true },
+    }),
+    trackSlugs.length
+      ? prisma.track.findMany({
+          where: { slug: { in: trackSlugs } },
+          select: { slug: true, tasks: { select: { id: true } } },
+        })
+      : Promise.resolve([]),
+  ]);
+
+  return {
+    taskCount,
+    userLevel: user.level,
+    streakCount: user.streakCount,
+    trackTaskIds: new Map(tracks.map((track: any) => [track.slug, track.tasks.map((task: any) => task.id)])),
+  };
+}
+
+async function meets(userId: string, criteria: Criteria, snapshot: BadgeSnapshot): Promise<boolean> {
   switch (criteria.type) {
     case "TASKS_COMPLETED": {
-      const done = await prisma.userTask.count({
-        where: { userId, status: "DONE" },
-      });
-      return done >= criteria.count;
+      return snapshot.taskCount >= criteria.count;
     }
     case "LEVEL_REACHED": {
-      const user = await prisma.user.findUniqueOrThrow({ where: { id: userId } });
-      return user.level >= criteria.level;
+      return snapshot.userLevel >= criteria.level;
     }
     case "STREAK_REACHED": {
-      const user = await prisma.user.findUniqueOrThrow({ where: { id: userId } });
-      return user.streakCount >= criteria.days;
+      return snapshot.streakCount >= criteria.days;
     }
     case "TRACK_COMPLETED": {
-      const track = await prisma.track.findUnique({
-        where: { slug: criteria.trackSlug },
-        include: { tasks: { select: { id: true } } },
-      });
-      if (!track || track.tasks.length === 0) return false;
+      const taskIds = snapshot.trackTaskIds.get(criteria.trackSlug);
+      if (!taskIds?.length) return false;
       const doneCount = await prisma.userTask.count({
         where: {
           userId,
           status: "DONE",
-          taskId: { in: track.tasks.map((t: any) => t.id) },
+          taskId: { in: taskIds },
         },
       });
-      return doneCount >= track.tasks.length;
+      return doneCount >= taskIds.length;
     }
     default:
       return false;
@@ -72,12 +102,14 @@ export async function evaluateBadges(userId: string): Promise<BadgeRecord[]> {
     }),
   ]);
   const earnedIds = new Set(earned.map((e: any) => e.badgeId));
+  const pending = allBadges.filter((badge: any) => !earnedIds.has(badge.id));
+  const criteriaList = pending.map((badge: any) => badge.criteria as unknown as Criteria);
+  const snapshot = await buildSnapshot(userId, criteriaList);
   const newlyAwarded: BadgeRecord[] = [];
 
-  for (const badge of allBadges) {
-    if (earnedIds.has(badge.id)) continue;
+  for (const badge of pending) {
     const criteria = badge.criteria as unknown as Criteria;
-    if (await meets(userId, criteria)) {
+    if (await meets(userId, criteria, snapshot)) {
       await prisma.userBadge.create({
         data: { userId, badgeId: badge.id },
       });

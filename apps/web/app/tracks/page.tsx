@@ -10,7 +10,7 @@ import { api } from "@/lib/api";
 import type { Badge, Task, Track, User } from "@/lib/types";
 
 export default function TracksPage() {
-  const { refresh } = useAuth();
+  const { updateUser } = useAuth();
   const [tracks, setTracks] = useState<Track[]>([]);
   const [active, setActive] = useState("");
   const [tasks, setTasks] = useState<Task[]>([]);
@@ -39,7 +39,7 @@ export default function TracksPage() {
       setTasks((items) => items.map((item) => (item.id === taskId ? { ...item, completed: true, completedAt: new Date().toISOString() } : item)));
       const badgeText = result.newBadges.length ? ` · ${result.newBadges.map((b) => b.name).join(", ")}` : "";
       setToast(`${result.xpGained} XP earned${result.leveledUp ? ` · Level ${result.newLevel}` : ""}${badgeText}`);
-      await refresh();
+      updateUser(result.user);
     } catch (err) {
       setToast((err as Error).message);
     } finally {

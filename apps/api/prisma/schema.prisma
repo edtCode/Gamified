@@ -66,6 +66,8 @@ model User {
   updatedAt DateTime @updatedAt
 
   @@index([collegeId, batch])
+  @@index([collegeId, batch, xp, createdAt])
+  @@index([collegeId, level, xp])
   @@index([xp])
 }
 
@@ -148,6 +150,8 @@ model Message {
   createdAt  DateTime @default(now())
 
   @@index([fromUserId, toUserId])
+  @@index([fromUserId, toUserId, createdAt])
+  @@index([toUserId, fromUserId, createdAt])
   @@index([toUserId, read])
 }
 
@@ -161,6 +165,7 @@ model Notification {
   createdAt DateTime @default(now())
 
   @@index([userId, read])
+  @@index([userId, createdAt])
 }
 
 // XP → level thresholds (seeded). level is reached when xp >= minXp.

@@ -3,7 +3,7 @@
   "version": 2,
   "framework": "nextjs",
   "installCommand": "npm install",
-  "buildCommand": "npm run build --workspace apps/web",
+  "buildCommand": "node apps/api/scripts/vercel-migrate.js && npm run build --workspace apps/web",
   "outputDirectory": "apps/web/public",
   "rewrites": [
     {
