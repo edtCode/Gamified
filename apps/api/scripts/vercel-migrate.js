@@ -23,6 +23,14 @@ if (!process.env.DATABASE_URL) {
   process.exit(0);
 }
 
+if (!process.env.DIRECT_URL) {
+  console.warn(
+    "[vercel-migrate] DIRECT_URL is not set — using DATABASE_URL for migrations. " +
+      "For pooled providers like Supabase, set DIRECT_URL to the direct database connection string."
+  );
+  process.env.DIRECT_URL = process.env.DATABASE_URL;
+}
+
 console.log("[vercel-migrate] Applying database migrations (prisma migrate deploy)...");
 try {
   execSync("prisma migrate deploy", { stdio: "inherit" });

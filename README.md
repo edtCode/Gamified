@@ -209,6 +209,7 @@ The `api` app reads the following variables:
 | `API_PORT` | Port the API server runs on |
 | `WEB_ORIGIN` | Allowed origin for the frontend (CORS) |
 | `DATABASE_URL` | PostgreSQL connection string |
+| `DIRECT_URL` | Direct PostgreSQL connection string for Prisma migrations |
 | `REDIS_URL` | Redis connection string |
 | `JWT_SECRET` | Secret used to sign JWTs |
 | `JWT_EXPIRES_IN` | JWT expiration duration |
