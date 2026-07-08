@@ -9,6 +9,7 @@ import { socialRouter } from "./routes/social";
 import { notificationsRouter } from "./routes/notifications";
 import { v2Router } from "./routes/v2stubs";
 import { notFound, errorHandler } from "./middleware/error";
+import { HttpError } from "./lib/http";
 
 // Allow the configured web origin plus any localhost/127.0.0.1 origin (any port).
 // A single hardcoded origin causes "Failed to fetch" in the browser whenever the
@@ -41,6 +42,16 @@ export function createApp() {
   app.use(express.json());
 
   app.get("/health", (_req, res) => res.json({ ok: true, service: "gamified-api" }));
+
+  app.use((req, _res, next) => {
+    if (req.path === "/health" || config.hasDatabaseUrl) return next();
+    next(
+      new HttpError(
+        503,
+        "Database is not configured. Set DATABASE_URL in the deployment environment."
+      )
+    );
+  });
 
   app.use("/auth", authRouter);
   app.use("/users", usersRouter);

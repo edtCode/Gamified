@@ -1,5 +1,6 @@
 import type { IncomingMessage, ServerResponse } from "http";
 import type { Express } from "express";
+import { createApp } from "../src/app";
 
 // Vercel serverless entrypoint. It reuses the same Express app that runs
 // locally (createApp), so every REST route (/auth, /users, /tracks, ...) works
@@ -10,7 +11,6 @@ let app: Express | undefined;
 
 function getApp() {
   if (!app) {
-    const { createApp } = require("../src/app") as typeof import("../src/app");
     app = createApp();
   }
   return app;

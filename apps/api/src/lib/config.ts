@@ -5,20 +5,12 @@ import path from "path";
 dotenv.config({ path: path.resolve(__dirname, "../../.env") });
 dotenv.config({ path: path.resolve(__dirname, "../../../../.env") });
 
-function required(name: string, fallback?: string): string {
-  const value = process.env[name] ?? fallback;
-  if (value === undefined) {
-    throw new Error(`Missing required environment variable: ${name}`);
-  }
-  return value;
-}
-
 export const config = {
   port: Number(process.env.API_PORT ?? 4000),
   webOrigin: process.env.WEB_ORIGIN ?? "http://localhost:3000",
-  databaseUrl: required("DATABASE_URL"),
+  hasDatabaseUrl: Boolean(process.env.DATABASE_URL?.trim()),
   redisUrl: process.env.REDIS_URL ?? "redis://localhost:6379",
-  jwtSecret: required("JWT_SECRET", "dev-change-me"),
+  jwtSecret: process.env.JWT_SECRET ?? "dev-change-me",
   jwtExpiresIn: process.env.JWT_EXPIRES_IN ?? "7d",
   allowedEmailDomains: (process.env.ALLOWED_EMAIL_DOMAINS ?? "example.edu")
     .split(",")
@@ -29,5 +21,7 @@ export const config = {
   // without an email round-trip. Enable this in environments that have no email
   // provider wired up (e.g. the current Vercel deploy); disable once real
   // verification emails are being sent.
-  autoVerifyEmail: (process.env.AUTO_VERIFY_EMAIL ?? "false").toLowerCase() === "true",
+  autoVerifyEmail:
+    (process.env.AUTO_VERIFY_EMAIL ?? (process.env.NODE_ENV === "production" ? "true" : "false"))
+      .toLowerCase() === "true",
 };

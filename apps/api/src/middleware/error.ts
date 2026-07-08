@@ -1,5 +1,6 @@
 import { NextFunction, Request, Response } from "express";
 import { ZodError } from "zod";
+import { Prisma } from "@prisma/client";
 import { HttpError } from "../lib/http";
 
 export function notFound(_req: Request, res: Response) {
@@ -23,6 +24,17 @@ export function errorHandler(
     return res.status(err.status).json({
       error: err.message,
       ...(err.details ? { details: err.details } : {}),
+    });
+  }
+
+  if (
+    err instanceof Prisma.PrismaClientInitializationError ||
+    err instanceof Prisma.PrismaClientKnownRequestError ||
+    err instanceof Prisma.PrismaClientUnknownRequestError
+  ) {
+    return res.status(503).json({
+      error: "Database request failed.",
+      message: err.message,
     });
   }
 
