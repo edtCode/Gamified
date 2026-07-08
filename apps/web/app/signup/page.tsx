@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { FormEvent, useState } from "react";
+import { ArrowRight, UserPlus } from "lucide-react";
 import { Button } from "@/components/Button";
 import { useAuth } from "../providers";
 
@@ -28,33 +29,43 @@ export default function SignupPage() {
   }
 
   return (
-    <main className="grid min-h-screen place-items-center px-4 py-10 bg-gradient-to-br from-indigo-50 via-white to-purple-50">
-      <form onSubmit={onSubmit} className="w-full max-w-md rounded-2xl border border-indigo-100 bg-white/95 p-8 shadow-2xl backdrop-blur">
-        <h1 className="text-3xl font-black text-slate-900">Create your profile</h1>
-        <p className="mt-2 text-sm text-slate-600 font-medium">Join the learning revolution 🚀</p>
-        <div className="mt-6 grid gap-4">
-          <div>
-            <label className="text-sm font-semibold text-slate-700">Full name</label>
-            <input className="mt-2 h-11 w-full rounded-lg border border-indigo-200 px-4 outline-none focus:border-indigo-600 focus:ring-2 focus:ring-indigo-500/20 transition" placeholder="Your name" value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} />
+    <main className="grid min-h-screen place-items-center px-4 py-10">
+      <form data-animate onSubmit={onSubmit} className="soft-surface w-full max-w-md rounded-md border border-ink/10 p-8 shadow-panel backdrop-blur-xl">
+        <div className="mb-6 flex items-center gap-4">
+          <div className="inline-flex h-12 w-12 items-center justify-center rounded-md bg-ink">
+            <UserPlus className="h-6 w-6 text-[#fbfaf7]" />
           </div>
           <div>
-            <label className="text-sm font-semibold text-slate-700">College email</label>
-            <input className="mt-2 h-11 w-full rounded-lg border border-indigo-200 px-4 outline-none focus:border-indigo-600 focus:ring-2 focus:ring-indigo-500/20 transition" placeholder="you@college.edu" value={form.email} onChange={(e) => setForm({ ...form, email: e.target.value })} />
-          </div>
-          <div>
-            <label className="text-sm font-semibold text-slate-700">Batch year</label>
-            <input className="mt-2 h-11 w-full rounded-lg border border-indigo-200 px-4 outline-none focus:border-indigo-600 focus:ring-2 focus:ring-indigo-500/20 transition" placeholder="2027" value={form.batch} onChange={(e) => setForm({ ...form, batch: e.target.value })} />
-          </div>
-          <div>
-            <label className="text-sm font-semibold text-slate-700">Password</label>
-            <input className="mt-2 h-11 w-full rounded-lg border border-indigo-200 px-4 outline-none focus:border-indigo-600 focus:ring-2 focus:ring-indigo-500/20 transition" type="password" placeholder="8+ characters" value={form.password} onChange={(e) => setForm({ ...form, password: e.target.value })} />
+            <h1 className="text-3xl font-black text-ink">Create your profile</h1>
+            <p className="mt-1 text-sm text-ink/60 font-medium">Join the learning workspace.</p>
           </div>
         </div>
-        {message && <p className="mt-4 rounded-lg bg-green-50 p-3 text-sm text-green-700 border border-green-200 font-medium break-words">{message}</p>}
-        {error && <p className="mt-4 rounded-lg bg-red-50 p-3 text-sm text-red-600 border border-red-200 font-medium">{error}</p>}
-        <Button className="mt-6 w-full" disabled={busy}>{busy ? "Creating..." : "Create account"}</Button>
-        <p className="mt-5 text-center text-sm text-slate-600">
-          Already verified? <Link className="font-bold text-indigo-600 hover:text-indigo-700" href="/login">Sign in</Link>
+        <div className="grid gap-4">
+          <div>
+            <label className="text-sm font-semibold text-ink/70">Full name</label>
+            <input className="minimal-input mt-2" placeholder="Your name" value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} />
+          </div>
+          <div>
+            <label className="text-sm font-semibold text-ink/70">College email</label>
+            <input className="minimal-input mt-2" placeholder="you@college.edu" value={form.email} onChange={(e) => setForm({ ...form, email: e.target.value })} />
+          </div>
+          <div>
+            <label className="text-sm font-semibold text-ink/70">Batch year</label>
+            <input className="minimal-input mt-2" placeholder="2027" value={form.batch} onChange={(e) => setForm({ ...form, batch: e.target.value })} />
+          </div>
+          <div>
+            <label className="text-sm font-semibold text-ink/70">Password</label>
+            <input className="minimal-input mt-2" type="password" placeholder="8+ characters" value={form.password} onChange={(e) => setForm({ ...form, password: e.target.value })} />
+          </div>
+        </div>
+        {message && <p className="mt-4 rounded-md bg-paper p-3 text-sm text-ink border border-ink/10 font-medium break-words">{message}</p>}
+        {error && <p className="mt-4 rounded-md bg-paper p-3 text-sm text-ink border border-ink/15 font-medium">{error}</p>}
+        <Button className="mt-6 h-12 w-full justify-between px-5" disabled={busy}>
+          {busy ? "Creating..." : "Create account"}
+          <ArrowRight className="h-4 w-4" />
+        </Button>
+        <p className="mt-5 text-center text-sm text-ink/60">
+          Already verified? <Link className="font-bold text-ink underline-offset-4 hover:underline" href="/login" prefetch>Sign in</Link>
         </p>
       </form>
     </main>

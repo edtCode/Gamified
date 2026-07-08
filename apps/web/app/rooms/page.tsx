@@ -1,6 +1,7 @@
 "use client";
 
 import { RequireAuth } from "@/components/RequireAuth";
+import { Button } from "@/components/Button";
 import { Panel } from "@/components/Panel";
 import { useEffect, useState } from "react";
 import { api } from "@/lib/api";
@@ -89,10 +90,10 @@ export default function RoomsPage() {
       <Panel>
         <h1 className="text-3xl font-black">Study rooms</h1>
         <p className="mt-2 text-ink/65">Create or join group study rooms for live sessions.</p>
-        {error && <p className="mt-4 text-coral">{error}</p>}
+        {error && <p className="mt-4 rounded-md border border-ink/10 bg-paper p-3 text-ink">{error}</p>}
         <form onSubmit={createRoom} className="mt-4 flex gap-2">
-          <input className="rounded-md border px-3" placeholder="Room name" value={name} onChange={(e) => setName(e.target.value)} />
-          <button className="rounded-md bg-sky px-3 py-2 text-white">Create</button>
+          <input className="minimal-input max-w-sm" placeholder="Room name" value={name} onChange={(e) => setName(e.target.value)} />
+          <Button>Create</Button>
         </form>
         <div className="mt-6">
           {!rooms && <p className="text-ink/65">Loading rooms...</p>}
@@ -104,28 +105,27 @@ export default function RoomsPage() {
                   <div className="font-semibold">
                     {r.name}
                     {r.joined && (
-                      <span className="ml-2 rounded-full bg-moss/15 px-2 py-0.5 text-xs font-semibold text-moss align-middle">Joined</span>
+                      <span className="ml-2 rounded-full border border-ink/10 bg-paper px-2 py-0.5 text-xs font-semibold text-ink/70 align-middle">Joined</span>
                     )}
                   </div>
                   <div className="text-sm text-ink/65">Members: {r.members}</div>
                 </div>
                 <div>
                   {r.joined ? (
-                    <button
+                    <Button
+                      variant="secondary"
                       onClick={() => leaveRoom(r.id)}
                       disabled={busyId === r.id}
-                      className="rounded-md border border-ink/20 px-3 py-2 text-ink/80 disabled:opacity-50"
                     >
                       {busyId === r.id ? "..." : "Leave"}
-                    </button>
+                    </Button>
                   ) : (
-                    <button
+                    <Button
                       onClick={() => joinRoom(r.id)}
                       disabled={busyId === r.id}
-                      className="rounded-md bg-moss px-3 py-2 text-white disabled:opacity-50"
                     >
                       {busyId === r.id ? "Joining..." : "Join"}
-                    </button>
+                    </Button>
                   )}
                 </div>
               </li>

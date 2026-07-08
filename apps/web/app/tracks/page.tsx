@@ -59,7 +59,7 @@ export default function TracksPage() {
             {tracks.map((track) => (
               <button
                 key={track.slug}
-                className={`rounded-md px-3 py-3 text-left text-sm font-bold transition ${active === track.slug ? "bg-ink text-white" : "bg-paper text-ink hover:bg-amber/15"}`}
+                className={`rounded-md border px-3 py-3 text-left text-sm font-bold transition ${active === track.slug ? "border-ink bg-ink text-[#fbfaf7]" : "border-ink/10 bg-paper text-ink hover:border-ink/30 hover:bg-[#fbfaf7]"}`}
                 onClick={() => setActive(track.slug)}
               >
                 {track.name}
@@ -70,21 +70,21 @@ export default function TracksPage() {
         </Panel>
         <div className="grid gap-3">
           {toast && (
-            <div className="flex items-center gap-2 rounded-md border border-moss/20 bg-moss/10 p-3 text-sm font-semibold text-moss">
+            <div data-animate className="flex items-center gap-2 rounded-md border border-ink/10 bg-[#fbfaf7] p-3 text-sm font-semibold text-ink shadow-panel">
               <Sparkles className="h-4 w-4" />
               {toast}
             </div>
           )}
           {tasks.map((task) => (
-            <Panel key={task.id} className={task.completed ? "bg-moss/5" : ""}>
+            <Panel key={task.id} className={task.completed ? "bg-paper" : ""}>
               <div className="flex flex-col justify-between gap-4 sm:flex-row sm:items-center">
                 <div className="min-w-0">
                   <div className="flex items-center gap-2">
-                    {task.completed ? <CheckCircle2 className="h-5 w-5 text-moss" /> : task.locked ? <Lock className="h-5 w-5 text-ink/35" /> : null}
+                    {task.completed ? <CheckCircle2 className="h-5 w-5 text-ink" /> : task.locked ? <Lock className="h-5 w-5 text-ink/35" /> : null}
                     <h2 className="font-black">{task.title}</h2>
                   </div>
                   <p className="mt-1 text-sm text-ink/65">{task.description}</p>
-                  <p className="mt-2 text-xs font-bold text-coral">{task.xpReward} XP · unlocks level {task.levelRequired}</p>
+                  <p className="mt-2 text-xs font-bold text-ink/45">{task.xpReward} XP / unlocks level {task.levelRequired}</p>
                 </div>
                 <Button disabled={task.completed || task.locked || busyTask === task.id} onClick={() => complete(task.id)}>
                   {task.completed ? "Done" : busyTask === task.id ? "Saving..." : "Complete"}

@@ -81,7 +81,7 @@ export default function MentorsPage() {
             {mentors.map((mentor) => (
               <button
                 key={mentor.id}
-                className={`rounded-md p-3 text-left transition ${activeId === mentor.id ? "bg-ink text-white" : "bg-paper hover:bg-amber/15"}`}
+                className={`rounded-md border p-3 text-left transition ${activeId === mentor.id ? "border-ink bg-ink text-[#fbfaf7]" : "border-ink/10 bg-paper hover:border-ink/30 hover:bg-[#fbfaf7]"}`}
                 onClick={() => setActiveId(mentor.id)}
               >
                 <div className="flex items-center gap-2 font-black">
@@ -104,19 +104,19 @@ export default function MentorsPage() {
               const mine = message.fromUserId === user?.id;
               return (
                 <div key={message.id} className={`flex ${mine ? "justify-end" : "justify-start"}`}>
-                  <div className={`max-w-[82%] rounded-md px-3 py-2 text-sm ${mine ? "bg-ink text-white" : "bg-paper text-ink"}`}>
+                  <div className={`max-w-[82%] rounded-md px-3 py-2 text-sm ${mine ? "bg-ink text-[#fbfaf7]" : "bg-paper text-ink"}`}>
                     <p>{message.body}</p>
-                    <p className={`mt-1 text-[11px] ${mine ? "text-white/55" : "text-ink/45"}`}>{new Date(message.createdAt).toLocaleTimeString()}</p>
+                    <p className={`mt-1 text-[11px] ${mine ? "text-[#fbfaf7]/55" : "text-ink/45"}`}>{new Date(message.createdAt).toLocaleTimeString()}</p>
                   </div>
                 </div>
               );
             })}
           </div>
           <form onSubmit={send} className="border-t border-ink/10 p-4">
-            {error && <p className="mb-3 rounded-md bg-coral/10 p-2 text-sm text-coral">{error}</p>}
+            {error && <p className="mb-3 rounded-md border border-ink/10 bg-paper p-2 text-sm text-ink">{error}</p>}
             <div className="flex gap-2">
               <input
-                className="h-11 min-w-0 flex-1 rounded-md border border-ink/15 px-3 outline-none focus:border-moss"
+                className="minimal-input min-w-0 flex-1"
                 value={body}
                 onChange={(e) => setBody(e.target.value)}
                 placeholder="Ask for help, feedback, or a mock interview..."

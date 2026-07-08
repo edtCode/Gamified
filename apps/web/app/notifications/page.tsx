@@ -39,11 +39,11 @@ export default function NotificationsPage() {
       <div className="grid gap-3">
         {items.length === 0 && <Panel><p className="text-ink/65">No notifications yet.</p></Panel>}
         {items.map((item) => (
-          <Panel key={item.id} className={item.read ? "opacity-70" : "border-moss/30"}>
+          <Panel key={item.id} className={item.read ? "opacity-70" : "border-ink/25 bg-[#fbfaf7]"}>
             <div className="flex gap-3">
-              <Bell className="mt-1 h-5 w-5 text-coral" />
+              <Bell className="mt-1 h-5 w-5 text-ink" />
               <div>
-                <div className="text-xs font-bold uppercase tracking-wide text-sky">{item.type}</div>
+                <div className="text-xs font-bold uppercase tracking-wide text-ink/45">{item.type}</div>
                 <div className="mt-1 font-semibold">{item.body}</div>
                 <div className="mt-2 text-xs text-ink/50">{new Date(item.createdAt).toLocaleString()}</div>
               </div>

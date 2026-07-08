@@ -23,15 +23,15 @@ export default function RoadmapPage() {
       <Panel>
         <h1 className="text-3xl font-black">Roadmap</h1>
         <p className="mt-2 text-ink/65">Predefined tracks and their tasks.</p>
-        {error && <p className="mt-4 text-coral">{error}</p>}
+        {error && <p className="mt-4 rounded-md border border-ink/10 bg-paper p-3 text-ink">{error}</p>}
         {!tracks && !error && <p className="mt-4 text-ink/65">Loading...</p>}
         {tracks?.map((t) => (
           <section key={t.id} className="mt-6">
             <h2 className="text-xl font-bold">{t.name}</h2>
             <p className="text-ink/65">{t.description}</p>
-            <ul className="mt-2 ml-4 list-disc">
+            <ul className="mt-3 grid gap-2">
               {t.tasks.map((task) => (
-                <li key={task.id} className="mt-1">
+                <li key={task.id} className="rounded-md border border-ink/10 bg-paper p-3">
                   <div className="font-semibold">{task.title} <span className="text-ink/65">(XP {task.xpReward})</span></div>
                   <div className="text-sm text-ink/60">{task.description}</div>
                 </li>

@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import { Award, BookOpenCheck, Flame, Trophy } from "lucide-react";
+import { ArrowRight, Award, BookOpenCheck, Flame, Sparkles, Trophy, UserPlus } from "lucide-react";
 import { useAuth } from "./providers";
 import { RequireAuth } from "@/components/RequireAuth";
 import { Panel } from "@/components/Panel";
@@ -32,37 +32,88 @@ export default function DashboardPage() {
 
   if (!user) {
     return (
-      <main className="grid min-h-screen place-items-center px-4 py-10 bg-gradient-to-br from-indigo-50 via-white to-purple-50">
-        <div className="w-full max-w-3xl space-y-8 rounded-3xl border border-indigo-100 bg-white/95 p-10 shadow-2xl shadow-indigo-100/50 backdrop-blur-lg">
-          <div className="space-y-3">
-            <p className="text-sm font-semibold uppercase tracking-[0.35em] text-indigo-600">LevelUp Campus</p>
-            <h1 className="text-4xl font-black text-slate-900 sm:text-5xl">Learn together, level up faster.</h1>
-            <p className="max-w-2xl text-base text-slate-600 sm:text-lg">
-              Join your batch, unlock badges, compete on leaderboards, and collaborate in live study rooms.
-            </p>
+      <main className="min-h-screen px-4 py-8 sm:py-12">
+        <section data-animate className="mx-auto grid min-h-[calc(100vh-6rem)] max-w-6xl items-center gap-8 lg:grid-cols-[1.08fr_0.92fr]">
+          <div className="space-y-7">
+            <div className="inline-flex items-center gap-2 rounded-full border border-ink/10 bg-[#fbfaf7]/75 px-4 py-2 text-xs font-bold uppercase tracking-[0.2em] text-ink/55 shadow-panel backdrop-blur">
+              <Sparkles className="h-3.5 w-3.5" />
+              LevelUp Campus
+            </div>
+            <div className="space-y-4">
+              <h1 className="max-w-3xl text-5xl font-black leading-[0.95] text-ink sm:text-6xl lg:text-7xl">
+                Learn sharper. Level up together.
+              </h1>
+              <p className="max-w-xl text-base leading-7 text-ink/62 sm:text-lg">
+                A focused learning dashboard for college batches, with tracks, mentors, study rooms, XP, and progress that feels calm instead of noisy.
+              </p>
+            </div>
+            <div className="grid max-w-xl gap-3 sm:grid-cols-2">
+              <Link href="/login" prefetch className="motion-button group inline-flex min-h-14 items-center justify-between rounded-md bg-ink px-5 py-4 text-sm font-bold text-[#fbfaf7] shadow-button transition">
+                <span>Sign in</span>
+                <span className="grid h-8 w-8 place-items-center rounded-full bg-[#fbfaf7]/12 transition group-hover:bg-[#fbfaf7]/20">
+                  <ArrowRight className="h-4 w-4" />
+                </span>
+              </Link>
+              <Link href="/signup" prefetch className="motion-button group inline-flex min-h-14 items-center justify-between rounded-md border border-ink/15 bg-[#fbfaf7]/85 px-5 py-4 text-sm font-bold text-ink shadow-panel backdrop-blur transition hover:border-ink/35">
+                <span>Create account</span>
+                <span className="grid h-8 w-8 place-items-center rounded-full bg-ink/7 transition group-hover:bg-ink/10">
+                  <UserPlus className="h-4 w-4" />
+                </span>
+              </Link>
+            </div>
+            <div className="grid max-w-2xl grid-cols-3 gap-3">
+              {[
+                { label: "Active tracks", value: "8" },
+                { label: "Study rooms", value: "5" },
+                { label: "Batch badges", value: "12" },
+              ].map((item) => (
+                <div key={item.label} className="rounded-md border border-ink/10 bg-[#fbfaf7]/70 p-4 shadow-panel backdrop-blur">
+                  <div className="text-2xl font-black text-ink">{item.value}</div>
+                  <div className="mt-1 text-xs font-semibold text-ink/50">{item.label}</div>
+                </div>
+              ))}
+            </div>
           </div>
-          <div className="grid gap-4 sm:grid-cols-2">
-            <Link href="/login" className="inline-flex items-center justify-center rounded-2xl bg-gradient-to-br from-indigo-600 to-purple-600 px-6 py-4 text-sm font-bold text-white shadow-lg shadow-indigo-200/50 transition hover:shadow-xl">
-              Sign in to your dashboard
-            </Link>
-            <Link href="/signup" className="inline-flex items-center justify-center rounded-2xl border border-indigo-200 bg-white px-6 py-4 text-sm font-bold text-slate-900 transition hover:bg-indigo-50">
-              Create your account
-            </Link>
-          </div>
-          <div className="grid gap-4 sm:grid-cols-4">
-            {[
-              { label: "XP", value: "220", description: "Grow your score" },
-              { label: "Badges", value: "12", description: "Earn achievements" },
-              { label: "Rooms", value: "5", description: "Join study groups" },
-              { label: "Tracks", value: "8", description: "Follow learning paths" },
-            ].map((item) => (
-              <div key={item.label} className="rounded-3xl bg-indigo-50 p-5 text-center">
-                <div className="text-3xl font-black text-slate-900">{item.value}</div>
-                <div className="mt-2 text-sm text-slate-600">{item.description}</div>
+
+          <div className="relative">
+            <div className="absolute -inset-4 rounded-[2rem] border border-ink/5 bg-[#fbfaf7]/30 blur-2xl" />
+            <div className="relative overflow-hidden rounded-md border border-ink/10 bg-[#fbfaf7]/88 p-5 shadow-panel backdrop-blur-xl">
+              <div className="mb-5 flex items-center justify-between border-b border-ink/10 pb-4">
+                <div>
+                  <p className="eyebrow">Today</p>
+                  <h2 className="mt-1 text-2xl font-black text-ink">Campus momentum</h2>
+                </div>
+                <div className="rounded-full bg-ink px-3 py-1 text-xs font-bold text-[#fbfaf7]">Live</div>
               </div>
-            ))}
+              <div className="space-y-3">
+                {[
+                  ["Roadmap", "Complete 3 milestones", "72%"],
+                  ["Mentors", "2 new replies", "Fast"],
+                  ["Leaderboard", "Rank #4 in batch", "+180 XP"],
+                ].map(([title, detail, meta]) => (
+                  <div key={title} className="rounded-md border border-ink/10 bg-paper/75 p-4">
+                    <div className="flex items-center justify-between gap-4">
+                      <div>
+                        <div className="font-black text-ink">{title}</div>
+                        <div className="mt-1 text-sm text-ink/55">{detail}</div>
+                      </div>
+                      <div className="rounded-full border border-ink/10 bg-[#fbfaf7] px-3 py-1 text-xs font-bold text-ink/65">{meta}</div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+              <div className="mt-5 rounded-md bg-ink p-5 text-[#fbfaf7]">
+                <div className="flex items-center justify-between text-sm font-bold">
+                  <span>Weekly focus</span>
+                  <span>84%</span>
+                </div>
+                <div className="mt-3 h-2 overflow-hidden rounded-full bg-[#fbfaf7]/18">
+                  <div className="h-full w-[84%] rounded-full bg-[#fbfaf7]" />
+                </div>
+              </div>
+            </div>
           </div>
-        </div>
+        </section>
       </main>
     );
   }
@@ -70,16 +121,16 @@ export default function DashboardPage() {
   return (
     <RequireAuth>
       <div className="grid gap-5">
-        <section className="rounded-md bg-ink p-6 text-white shadow-panel">
+        <section data-animate className="rounded-md bg-ink p-6 text-[#fbfaf7] shadow-panel">
           <div className="flex flex-col justify-between gap-4 md:flex-row md:items-end">
             <div>
-              <p className="text-sm font-semibold text-white/65">{user.college.name} · Batch {user.batch}</p>
+              <p className="text-sm font-semibold text-[#fbfaf7]/65">{user.college.name} · Batch {user.batch}</p>
               <h1 className="mt-2 text-3xl font-black sm:text-4xl">Level {user.level}: {user.levelTitle}</h1>
-              <p className="mt-2 max-w-2xl text-white/70">{user.name}, you have {user.xp} XP, {user.tasksCompleted} tasks completed, and {user.badgeCount} badges earned.</p>
+              <p className="mt-2 max-w-2xl text-[#fbfaf7]/70">{user.name}, you have {user.xp} XP, {user.tasksCompleted} tasks completed, and {user.badgeCount} badges earned.</p>
             </div>
-            <Link href="/tracks" className="inline-flex h-11 items-center justify-center rounded-md bg-coral px-4 text-sm font-bold">Complete a task</Link>
+            <Link href="/tracks" prefetch className="motion-button inline-flex h-11 items-center justify-center rounded-md bg-[#fbfaf7] px-4 text-sm font-bold text-ink shadow-button transition">Complete a task</Link>
           </div>
-          <div className="mt-6 rounded-md bg-white/10 p-4">
+          <div className="mt-6 rounded-md bg-[#fbfaf7]/10 p-4">
             <XPBar xpIntoLevel={user.xpIntoLevel} xpForThisLevel={user.xpForThisLevel} />
           </div>
         </section>
@@ -93,7 +144,7 @@ export default function DashboardPage() {
             const Icon = stat.icon;
             return (
               <Panel key={stat.label}>
-                <Icon className="h-5 w-5 text-coral" />
+                <Icon className="h-5 w-5 text-ink" />
                 <div className="mt-4 text-2xl font-black">{stat.value}</div>
                 <div className="text-sm text-ink/60">{stat.label}</div>
               </Panel>
@@ -104,14 +155,14 @@ export default function DashboardPage() {
           <Panel>
             <div className="mb-4 flex items-center justify-between">
               <h2 className="text-xl font-black">Learning tracks</h2>
-              <Link className="text-sm font-bold text-sky" href="/tracks">View all</Link>
+              <Link className="text-sm font-bold text-ink underline-offset-4 hover:underline" href="/tracks" prefetch>View all</Link>
             </div>
             <div className="grid gap-3">
               {tracks.map((track) => (
                 <div key={track.slug} className="rounded-md border border-ink/10 p-4">
                   <div className="font-bold">{track.name}</div>
                   <div className="mt-1 text-sm text-ink/60">{track.description}</div>
-                  <div className="mt-3 text-xs font-semibold text-moss">{track.taskCount} milestones</div>
+                  <div className="mt-3 text-xs font-semibold text-ink/45">{track.taskCount} milestones</div>
                 </div>
               ))}
             </div>
@@ -121,7 +172,7 @@ export default function DashboardPage() {
             <div className="mt-4 grid gap-3">
               {badges.length === 0 && <p className="text-sm text-ink/60">Complete your first task to earn a badge.</p>}
               {badges.map((badge) => (
-                <div key={badge.slug} className="flex gap-3 rounded-md bg-paper p-3">
+                <div key={badge.slug} className="flex gap-3 rounded-md border border-ink/10 bg-paper p-3">
                   <span className="text-2xl">{badge.icon}</span>
                   <div>
                     <div className="font-bold">{badge.name}</div>

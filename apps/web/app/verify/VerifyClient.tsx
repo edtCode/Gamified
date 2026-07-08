@@ -35,11 +35,11 @@ export function VerifyClient() {
   }
 
   return (
-    <form onSubmit={onSubmit} className="w-full max-w-md rounded-md border border-ink/10 bg-white p-6 shadow-panel">
+    <form data-animate onSubmit={onSubmit} className="soft-surface w-full max-w-md rounded-md border border-ink/10 p-6 shadow-panel">
       <h1 className="text-2xl font-black">Verify college email</h1>
       <p className="mt-1 text-sm text-ink/65">Paste the token from the API console if it was not included in the URL.</p>
-      <input className="mt-6 h-11 w-full rounded-md border border-ink/15 px-3" value={token} onChange={(e) => setTokenValue(e.target.value)} />
-      {error && <p className="mt-4 rounded-md bg-coral/10 p-3 text-sm text-coral">{error}</p>}
+      <input className="minimal-input mt-6" value={token} onChange={(e) => setTokenValue(e.target.value)} />
+      {error && <p className="mt-4 rounded-md border border-ink/10 bg-paper p-3 text-sm text-ink">{error}</p>}
       <Button className="mt-5 w-full" disabled={busy || !token}>{busy ? "Verifying..." : "Verify and enter"}</Button>
     </form>
   );

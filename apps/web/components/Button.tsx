@@ -6,13 +6,13 @@ type Props = ButtonHTMLAttributes<HTMLButtonElement> & {
 
 export function Button({ className = "", variant = "primary", ...props }: Props) {
   const variants = {
-    primary: "bg-gradient-to-br from-indigo-600 to-purple-600 text-white hover:from-indigo-700 hover:to-purple-700 shadow-md hover:shadow-lg",
-    secondary: "bg-white text-ink border border-indigo-200 hover:border-indigo-400 hover:bg-indigo-50",
-    ghost: "bg-transparent text-ink hover:bg-indigo-50/50",
+    primary: "bg-ink text-[#fbfaf7] shadow-button hover:bg-[#252525]",
+    secondary: "soft-surface text-ink border border-ink/15 shadow-panel hover:border-ink/35",
+    ghost: "bg-transparent text-ink hover:bg-ink/5",
   };
   return (
     <button
-      className={`inline-flex h-10 items-center justify-center gap-2 rounded-lg px-4 text-sm font-semibold transition-all duration-200 ${variants[variant]} ${className}`}
+      className={`motion-button inline-flex h-10 items-center justify-center gap-2 rounded-md px-4 text-sm font-semibold transition-all duration-200 ${variants[variant]} ${className}`}
       {...props}
     />
   );

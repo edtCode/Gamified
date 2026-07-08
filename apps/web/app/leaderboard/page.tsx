@@ -37,10 +37,10 @@ export default function LeaderboardPage() {
             </thead>
             <tbody>
               {rows.map((row) => (
-                <tr key={row.userId} className={`border-b border-ink/5 ${row.isCurrentUser ? "bg-amber/15" : ""}`}>
+                <tr key={row.userId} className={`border-b border-ink/5 ${row.isCurrentUser ? "bg-paper" : ""}`}>
                   <td className="py-4 font-black">
                     <span className="inline-flex items-center gap-2">
-                      {row.rank <= 3 && <Medal className="h-4 w-4 text-coral" />}
+                      {row.rank <= 3 && <Medal className="h-4 w-4 text-ink" />}
                       #{row.rank}
                     </span>
                   </td>

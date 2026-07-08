@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import { Providers } from "./providers";
+import { SiteMotion } from "@/components/SiteMotion";
 
 export const metadata: Metadata = {
   title: "Gamified College Learning",
@@ -11,7 +12,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="en" suppressHydrationWarning>
       <body suppressHydrationWarning>
-        <Providers>{children}</Providers>
+        <Providers>
+          <SiteMotion>{children}</SiteMotion>
+        </Providers>
       </body>
     </html>
   );
