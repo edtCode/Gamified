@@ -1,6 +1,35 @@
 const fs = require("node:fs/promises");
 const path = require("node:path");
 
+async function directoryExists(dir) {
+  try {
+    const stat = await fs.stat(dir);
+    return stat.isDirectory();
+  } catch {
+    return false;
+  }
+}
+
+async function copyStaticExportToPublic(root) {
+  const outDir = path.join(root, "out");
+  const publicDir = path.join(root, "public");
+
+  if (await directoryExists(outDir)) {
+    await fs.rm(publicDir, { recursive: true, force: true });
+    await fs.mkdir(publicDir, { recursive: true });
+    await fs.cp(outDir, publicDir, { recursive: true });
+    console.log("Copied static export from out into public for Vercel output.");
+    return;
+  }
+
+  await fs.mkdir(publicDir, { recursive: true });
+  await fs.writeFile(
+    path.join(publicDir, ".vercel-output-placeholder"),
+    "Created by build so Vercel outputDirectory=public is never missing.\n"
+  );
+  console.log("Created public directory fallback for Vercel output.");
+}
+
 async function main() {
   const root = process.cwd();
   const serverDir = path.join(root, ".next", "server");
@@ -10,10 +39,12 @@ async function main() {
     const stat = await fs.stat(chunksDir);
     if (!stat.isDirectory()) {
       console.log("No server chunks directory found; nothing to link.");
+      await copyStaticExportToPublic(root);
       return;
     }
   } catch {
     console.log("No server chunks directory found; nothing to link.");
+    await copyStaticExportToPublic(root);
     return;
   }
 
@@ -36,6 +67,7 @@ async function main() {
   }
 
   console.log("Linked server chunk files from .next/server/chunks into .next/server.");
+  await copyStaticExportToPublic(root);
 }
 
 main().catch((error) => {

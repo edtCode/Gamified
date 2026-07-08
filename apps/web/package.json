@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "node ./scripts/clean-static-output.cjs && next build && node ./scripts/export-to-public.cjs",
+    "build": "node ./scripts/clean-static-output.cjs && next build && node ./scripts/export-to-public.cjs && node ./scripts/link-server-chunks.cjs",
     "start": "next start",
     "lint": "next lint"
   },
