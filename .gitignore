@@ -30,3 +30,5 @@ apps/api/prisma/*.db
 # Misc
 coverage/
 .turbo/
+.vercel
+.env*
