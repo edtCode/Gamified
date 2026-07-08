@@ -82,7 +82,7 @@ export function SiteMotion({ children }: { children: React.ReactNode }) {
       <div
         ref={cursor}
         aria-hidden
-        className="pointer-events-none fixed left-0 top-0 z-[100] hidden h-9 w-9 -translate-x-1/2 -translate-y-1/2 rounded-full border border-ink/70 bg-ink/10 shadow-[0_10px_30px_rgba(21,21,21,0.18)] backdrop-blur-[1px] md:block"
+        className="pointer-events-none fixed left-0 top-0 z-[100] hidden h-9 w-9 -translate-x-1/2 -translate-y-1/2 rounded-full border border-ink/70 bg-ink/10 shadow-[0_10px_30px_rgba(60,63,69,0.22)] backdrop-blur-[1px] md:block"
       />
       <div
         ref={cursorDot}

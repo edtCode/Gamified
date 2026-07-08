@@ -39,7 +39,7 @@ export default function NotificationsPage() {
       <div className="grid gap-3">
         {items.length === 0 && <Panel><p className="text-ink/65">No notifications yet.</p></Panel>}
         {items.map((item) => (
-          <Panel key={item.id} className={item.read ? "opacity-70" : "border-ink/25 bg-[#fbfaf7]"}>
+          <Panel key={item.id} className={item.read ? "opacity-70" : "border-ink/25 bg-steelWhite"}>
             <div className="flex gap-3">
               <Bell className="mt-1 h-5 w-5 text-ink" />
               <div>

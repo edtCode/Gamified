@@ -6,9 +6,9 @@ type Props = ButtonHTMLAttributes<HTMLButtonElement> & {
 
 export function Button({ className = "", variant = "primary", ...props }: Props) {
   const variants = {
-    primary: "bg-ink text-[#fbfaf7] shadow-button hover:bg-[#252525]",
-    secondary: "soft-surface text-ink border border-ink/15 shadow-panel hover:border-ink/35",
-    ghost: "bg-transparent text-ink hover:bg-ink/5",
+    primary: "steel-button border border-silver/55 bg-ink text-steelWhite shadow-button hover:bg-coral",
+    secondary: "steel-button soft-surface text-ink border border-silver/70 shadow-panel hover:border-ink/45",
+    ghost: "bg-transparent text-ink hover:bg-silver/18",
   };
   return (
     <button

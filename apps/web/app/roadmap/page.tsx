@@ -24,7 +24,13 @@ export default function RoadmapPage() {
         <h1 className="text-3xl font-black">Roadmap</h1>
         <p className="mt-2 text-ink/65">Predefined tracks and their tasks.</p>
         {error && <p className="mt-4 rounded-md border border-ink/10 bg-paper p-3 text-ink">{error}</p>}
-        {!tracks && !error && <p className="mt-4 text-ink/65">Loading...</p>}
+        {!tracks && !error && (
+          <div className="mt-6 grid gap-3">
+            {[0, 1, 2].map((item) => (
+              <div key={item} className="h-20 animate-pulse rounded-md border border-ink/10 bg-paper/70" />
+            ))}
+          </div>
+        )}
         {tracks?.map((t) => (
           <section key={t.id} className="mt-6">
             <h2 className="text-xl font-bold">{t.name}</h2>

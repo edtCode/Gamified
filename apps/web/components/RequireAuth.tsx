@@ -13,8 +13,12 @@ export function RequireAuth({ children }: { children: React.ReactNode }) {
     if (!loading && !user) router.push("/login");
   }, [loading, router, user]);
 
-  if (loading) {
-    return <div className="grid min-h-screen place-items-center text-sm font-semibold text-ink/65">Loading...</div>;
+  if (loading && !user) {
+    return (
+      <div className="grid min-h-screen place-items-center px-4">
+        <div className="h-10 w-10 animate-spin rounded-full border border-ink/10 border-t-ink/55" />
+      </div>
+    );
   }
 
   if (!user) {

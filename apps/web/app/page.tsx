@@ -27,7 +27,11 @@ export default function DashboardPage() {
   }, [user]);
 
   if (loading) {
-    return <div className="grid min-h-screen place-items-center text-sm font-semibold text-ink/65">Loading...</div>;
+    return (
+      <main className="grid min-h-screen place-items-center px-4">
+        <div className="h-10 w-10 animate-spin rounded-full border border-ink/10 border-t-ink/55" />
+      </main>
+    );
   }
 
   if (!user) {
@@ -35,7 +39,7 @@ export default function DashboardPage() {
       <main className="min-h-screen px-4 py-8 sm:py-12">
         <section data-animate className="mx-auto grid min-h-[calc(100vh-6rem)] max-w-6xl items-center gap-8 lg:grid-cols-[1.08fr_0.92fr]">
           <div className="space-y-7">
-            <div className="inline-flex items-center gap-2 rounded-full border border-ink/10 bg-[#fbfaf7]/75 px-4 py-2 text-xs font-bold uppercase tracking-[0.2em] text-ink/55 shadow-panel backdrop-blur">
+            <div className="inline-flex items-center gap-2 rounded-full border border-ink/10 bg-steelWhite/75 px-4 py-2 text-xs font-bold uppercase tracking-[0.2em] text-ink/55 shadow-panel backdrop-blur">
               <Sparkles className="h-3.5 w-3.5" />
               LevelUp Campus
             </div>
@@ -48,13 +52,13 @@ export default function DashboardPage() {
               </p>
             </div>
             <div className="grid max-w-xl gap-3 sm:grid-cols-2">
-              <Link href="/login" prefetch className="motion-button group inline-flex min-h-14 items-center justify-between rounded-md bg-ink px-5 py-4 text-sm font-bold text-[#fbfaf7] shadow-button transition">
+              <Link href="/login" prefetch className="steel-button motion-button group inline-flex min-h-14 items-center justify-between rounded-md border border-silver/55 bg-ink px-5 py-4 text-sm font-bold text-steelWhite shadow-button transition">
                 <span>Sign in</span>
-                <span className="grid h-8 w-8 place-items-center rounded-full bg-[#fbfaf7]/12 transition group-hover:bg-[#fbfaf7]/20">
+                <span className="grid h-8 w-8 place-items-center rounded-full bg-steelWhite/12 transition group-hover:bg-steelWhite/20">
                   <ArrowRight className="h-4 w-4" />
                 </span>
               </Link>
-              <Link href="/signup" prefetch className="motion-button group inline-flex min-h-14 items-center justify-between rounded-md border border-ink/15 bg-[#fbfaf7]/85 px-5 py-4 text-sm font-bold text-ink shadow-panel backdrop-blur transition hover:border-ink/35">
+              <Link href="/signup" prefetch className="steel-button motion-button group inline-flex min-h-14 items-center justify-between rounded-md border border-silver/70 bg-steelWhite/85 px-5 py-4 text-sm font-bold text-ink shadow-panel backdrop-blur transition hover:border-ink/35">
                 <span>Create account</span>
                 <span className="grid h-8 w-8 place-items-center rounded-full bg-ink/7 transition group-hover:bg-ink/10">
                   <UserPlus className="h-4 w-4" />
@@ -67,7 +71,7 @@ export default function DashboardPage() {
                 { label: "Study rooms", value: "5" },
                 { label: "Batch badges", value: "12" },
               ].map((item) => (
-                <div key={item.label} className="rounded-md border border-ink/10 bg-[#fbfaf7]/70 p-4 shadow-panel backdrop-blur">
+                <div key={item.label} className="rounded-md border border-ink/10 bg-steelWhite/70 p-4 shadow-panel backdrop-blur">
                   <div className="text-2xl font-black text-ink">{item.value}</div>
                   <div className="mt-1 text-xs font-semibold text-ink/50">{item.label}</div>
                 </div>
@@ -76,14 +80,14 @@ export default function DashboardPage() {
           </div>
 
           <div className="relative">
-            <div className="absolute -inset-4 rounded-[2rem] border border-ink/5 bg-[#fbfaf7]/30 blur-2xl" />
-            <div className="relative overflow-hidden rounded-md border border-ink/10 bg-[#fbfaf7]/88 p-5 shadow-panel backdrop-blur-xl">
+            <div className="absolute -inset-4 rounded-[2rem] border border-ink/5 bg-steelWhite/30 blur-2xl" />
+            <div className="relative overflow-hidden rounded-md border border-ink/10 bg-steelWhite/88 p-5 shadow-panel backdrop-blur-xl">
               <div className="mb-5 flex items-center justify-between border-b border-ink/10 pb-4">
                 <div>
                   <p className="eyebrow">Today</p>
                   <h2 className="mt-1 text-2xl font-black text-ink">Campus momentum</h2>
                 </div>
-                <div className="rounded-full bg-ink px-3 py-1 text-xs font-bold text-[#fbfaf7]">Live</div>
+                <div className="rounded-full bg-ink px-3 py-1 text-xs font-bold text-steelWhite">Live</div>
               </div>
               <div className="space-y-3">
                 {[
@@ -97,18 +101,18 @@ export default function DashboardPage() {
                         <div className="font-black text-ink">{title}</div>
                         <div className="mt-1 text-sm text-ink/55">{detail}</div>
                       </div>
-                      <div className="rounded-full border border-ink/10 bg-[#fbfaf7] px-3 py-1 text-xs font-bold text-ink/65">{meta}</div>
+                      <div className="rounded-full border border-ink/10 bg-steelWhite px-3 py-1 text-xs font-bold text-ink/65">{meta}</div>
                     </div>
                   </div>
                 ))}
               </div>
-              <div className="mt-5 rounded-md bg-ink p-5 text-[#fbfaf7]">
+              <div className="mt-5 rounded-md bg-ink p-5 text-steelWhite">
                 <div className="flex items-center justify-between text-sm font-bold">
                   <span>Weekly focus</span>
                   <span>84%</span>
                 </div>
-                <div className="mt-3 h-2 overflow-hidden rounded-full bg-[#fbfaf7]/18">
-                  <div className="h-full w-[84%] rounded-full bg-[#fbfaf7]" />
+                <div className="mt-3 h-2 overflow-hidden rounded-full bg-steelWhite/18">
+                  <div className="h-full w-[84%] rounded-full bg-steelWhite" />
                 </div>
               </div>
             </div>
@@ -121,16 +125,16 @@ export default function DashboardPage() {
   return (
     <RequireAuth>
       <div className="grid gap-5">
-        <section data-animate className="rounded-md bg-ink p-6 text-[#fbfaf7] shadow-panel">
+        <section data-animate className="rounded-md bg-ink p-6 text-steelWhite shadow-panel">
           <div className="flex flex-col justify-between gap-4 md:flex-row md:items-end">
             <div>
-              <p className="text-sm font-semibold text-[#fbfaf7]/65">{user.college.name} · Batch {user.batch}</p>
+              <p className="text-sm font-semibold text-steelWhite/65">{user.college.name} · Batch {user.batch}</p>
               <h1 className="mt-2 text-3xl font-black sm:text-4xl">Level {user.level}: {user.levelTitle}</h1>
-              <p className="mt-2 max-w-2xl text-[#fbfaf7]/70">{user.name}, you have {user.xp} XP, {user.tasksCompleted} tasks completed, and {user.badgeCount} badges earned.</p>
+              <p className="mt-2 max-w-2xl text-steelWhite/70">{user.name}, you have {user.xp} XP, {user.tasksCompleted} tasks completed, and {user.badgeCount} badges earned.</p>
             </div>
-            <Link href="/tracks" prefetch className="motion-button inline-flex h-11 items-center justify-center rounded-md bg-[#fbfaf7] px-4 text-sm font-bold text-ink shadow-button transition">Complete a task</Link>
+            <Link href="/tracks" prefetch className="steel-button motion-button inline-flex h-11 items-center justify-center rounded-md border border-silver/60 bg-steelWhite px-4 text-sm font-bold text-ink shadow-button transition">Complete a task</Link>
           </div>
-          <div className="mt-6 rounded-md bg-[#fbfaf7]/10 p-4">
+          <div className="mt-6 rounded-md bg-steelWhite/10 p-4">
             <XPBar xpIntoLevel={user.xpIntoLevel} xpForThisLevel={user.xpForThisLevel} />
           </div>
         </section>

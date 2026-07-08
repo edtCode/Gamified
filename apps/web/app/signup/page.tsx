@@ -33,7 +33,7 @@ export default function SignupPage() {
       <form data-animate onSubmit={onSubmit} className="soft-surface w-full max-w-md rounded-md border border-ink/10 p-8 shadow-panel backdrop-blur-xl">
         <div className="mb-6 flex items-center gap-4">
           <div className="inline-flex h-12 w-12 items-center justify-center rounded-md bg-ink">
-            <UserPlus className="h-6 w-6 text-[#fbfaf7]" />
+            <UserPlus className="h-6 w-6 text-steelWhite" />
           </div>
           <div>
             <h1 className="text-3xl font-black text-ink">Create your profile</h1>

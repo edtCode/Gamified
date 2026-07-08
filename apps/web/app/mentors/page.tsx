@@ -81,7 +81,7 @@ export default function MentorsPage() {
             {mentors.map((mentor) => (
               <button
                 key={mentor.id}
-                className={`rounded-md border p-3 text-left transition ${activeId === mentor.id ? "border-ink bg-ink text-[#fbfaf7]" : "border-ink/10 bg-paper hover:border-ink/30 hover:bg-[#fbfaf7]"}`}
+                className={`rounded-md border p-3 text-left transition ${activeId === mentor.id ? "border-ink bg-ink text-steelWhite" : "border-ink/10 bg-paper hover:border-ink/30 hover:bg-steelWhite"}`}
                 onClick={() => setActiveId(mentor.id)}
               >
                 <div className="flex items-center gap-2 font-black">
@@ -104,9 +104,9 @@ export default function MentorsPage() {
               const mine = message.fromUserId === user?.id;
               return (
                 <div key={message.id} className={`flex ${mine ? "justify-end" : "justify-start"}`}>
-                  <div className={`max-w-[82%] rounded-md px-3 py-2 text-sm ${mine ? "bg-ink text-[#fbfaf7]" : "bg-paper text-ink"}`}>
+                  <div className={`max-w-[82%] rounded-md px-3 py-2 text-sm ${mine ? "bg-ink text-steelWhite" : "bg-paper text-ink"}`}>
                     <p>{message.body}</p>
-                    <p className={`mt-1 text-[11px] ${mine ? "text-[#fbfaf7]/55" : "text-ink/45"}`}>{new Date(message.createdAt).toLocaleTimeString()}</p>
+                    <p className={`mt-1 text-[11px] ${mine ? "text-steelWhite/55" : "text-ink/45"}`}>{new Date(message.createdAt).toLocaleTimeString()}</p>
                   </div>
                 </div>
               );

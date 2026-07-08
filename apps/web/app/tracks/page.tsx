@@ -59,7 +59,7 @@ export default function TracksPage() {
             {tracks.map((track) => (
               <button
                 key={track.slug}
-                className={`rounded-md border px-3 py-3 text-left text-sm font-bold transition ${active === track.slug ? "border-ink bg-ink text-[#fbfaf7]" : "border-ink/10 bg-paper text-ink hover:border-ink/30 hover:bg-[#fbfaf7]"}`}
+                className={`rounded-md border px-3 py-3 text-left text-sm font-bold transition ${active === track.slug ? "border-ink bg-ink text-steelWhite" : "border-ink/10 bg-paper text-ink hover:border-ink/30 hover:bg-steelWhite"}`}
                 onClick={() => setActive(track.slug)}
               >
                 {track.name}
@@ -70,7 +70,7 @@ export default function TracksPage() {
         </Panel>
         <div className="grid gap-3">
           {toast && (
-            <div data-animate className="flex items-center gap-2 rounded-md border border-ink/10 bg-[#fbfaf7] p-3 text-sm font-semibold text-ink shadow-panel">
+            <div data-animate className="flex items-center gap-2 rounded-md border border-ink/10 bg-steelWhite p-3 text-sm font-semibold text-ink shadow-panel">
               <Sparkles className="h-4 w-4" />
               {toast}
             </div>

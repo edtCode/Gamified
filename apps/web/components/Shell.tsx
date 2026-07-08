@@ -1,7 +1,8 @@
 "use client";
 
+import { useEffect } from "react";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { Bell, BookOpenCheck, Flame, GraduationCap, LayoutDashboard, LogOut, Medal, MessageSquare, Zap } from "lucide-react";
 import { Button } from "./Button";
 import { useAuth } from "@/app/providers";
@@ -18,11 +19,16 @@ const nav = [
 
 export function Shell({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
+  const router = useRouter();
   const { user, logout } = useAuth();
+
+  useEffect(() => {
+    nav.forEach((item) => router.prefetch(item.href));
+  }, [router]);
 
   return (
     <div className="min-h-screen">
-      <aside className="fixed inset-y-0 left-0 hidden w-64 border-r border-ink/10 bg-[#fbfaf7]/85 p-4 backdrop-blur-xl lg:block">
+      <aside className="fixed inset-y-0 left-0 hidden w-64 border-r border-ink/10 bg-steelWhite/85 p-4 backdrop-blur-xl lg:block">
         <Link href="/" className="flex items-center gap-3 rounded-md px-2 py-3 text-lg font-black text-ink">
           <GraduationCap className="h-7 w-7 text-ink" />
           LevelUp
@@ -38,7 +44,7 @@ export function Shell({ children }: { children: React.ReactNode }) {
                 prefetch
                 className={`flex items-center gap-3 rounded-md px-3 py-2.5 text-sm font-semibold transition-all duration-200 ${
                   active
-                    ? "bg-ink text-[#fbfaf7] shadow-panel"
+                    ? "bg-ink text-steelWhite shadow-panel"
                     : "text-ink/65 hover:bg-ink/5 hover:text-ink"
                 }`}
               >
@@ -61,7 +67,7 @@ export function Shell({ children }: { children: React.ReactNode }) {
           </Button>
         </div>
       </aside>
-      <header className="sticky top-0 z-20 border-b border-ink/10 bg-[#fbfaf7]/85 backdrop-blur-xl px-4 py-3 lg:hidden">
+      <header className="sticky top-0 z-20 border-b border-ink/10 bg-steelWhite/85 backdrop-blur-xl px-4 py-3 lg:hidden">
         <div className="flex items-center justify-between">
           <Link href="/" className="flex items-center gap-2 font-black text-ink">
             <GraduationCap className="h-6 w-6 text-ink" />
@@ -82,8 +88,8 @@ export function Shell({ children }: { children: React.ReactNode }) {
                 prefetch
                 className={`flex min-w-10 items-center justify-center rounded-md border p-2 transition-all ${
                   active
-                    ? "border-ink bg-ink text-[#fbfaf7] shadow-panel"
-                    : "border-ink/10 bg-[#fbfaf7] text-ink/70"
+                    ? "border-ink bg-ink text-steelWhite shadow-panel"
+                    : "border-ink/10 bg-steelWhite text-ink/70"
                 }`}
                 title={item.label}
               >

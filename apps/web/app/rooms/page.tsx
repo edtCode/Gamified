@@ -96,7 +96,13 @@ export default function RoomsPage() {
           <Button>Create</Button>
         </form>
         <div className="mt-6">
-          {!rooms && <p className="text-ink/65">Loading rooms...</p>}
+          {!rooms && (
+            <div className="grid gap-3">
+              {[0, 1, 2].map((item) => (
+                <div key={item} className="h-16 animate-pulse rounded-md border border-ink/10 bg-paper/70" />
+              ))}
+            </div>
+          )}
           {rooms?.length === 0 && <p className="text-ink/65">No active rooms</p>}
           <ul className="mt-4 space-y-3">
             {rooms?.map((r) => (
